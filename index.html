@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비트 런! - 점프 리듬게임</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: #1a1a2e;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #00fff5;
+            text-shadow: 0 0 10px rgba(0, 255, 245, 0.5);
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #a0a0c0;
+            margin-top: 5px;
+        }
+
+        #game-container {
+            position: relative;
+            width: 700px;
+            height: 350px;
+            background: linear-gradient(to bottom, #16213e, #0f3460);
+            border: 4px solid #00fff5;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 255, 245, 0.3);
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .score-board {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 5px #000;
+        }
+
+        .combo-board {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff2e63;
+            text-shadow: 0 0 5px #000;
+        }
+
+        /* 게임 오버 / 시작 화면 레이어 */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 52, 96, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .overlay h2 {
+            font-size: 36px;
+            color: #00fff5;
+            margin-bottom: 10px;
+        }
+
+        .overlay p {
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: #e94560;
+        }
+
+        .btn {
+            background-color: #ff2e63;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 46, 99, 0.5);
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #e94560;
+            transform: scale(1.05);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🎵 BEAT JUMP 🎵</h1>
+        <p>리듬 비트에 맞춰 장애물을 점프하세요! (스페이스바 / 화면 클릭)</p>
+    </div>
+
+    <div id="game-container">
+        <canvas id="gameCanvas" width="700" height="350"></canvas>
+        <div class="score-board">SCORE: <span id="score">0</span></div>
+        <div class="combo-board"><span id="combo">0</span> COMBO!</div>
+
+        <!-- 시작 화면 -->
+        <div id="start-screen" class="overlay">
+            <h2>BEAT JUMP</h2>
+            <p>준비가 되면 시작 버튼을 누르세요!</p>
+            <button class="btn" onclick="startGame()">GAME START</button>
+        </div>
+
+        <!-- 게임 오버 화면 -->
+        <div id="gameover-screen" class="overlay hidden">
+            <h2>GAME OVER</h2>
+            <p id="final-score">최종 점수: 0</p>
+            <button class="btn" onclick="startGame()">RETRY</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // UI 요소
+        const scoreEl = document.getElementById('score');
+        const comboEl = document.getElementById('combo');
+        const startScreen = document.getElementById('start-screen');
+        const gameoverScreen = document.getElementById('gameover-screen');
+        const finalScoreEl = document.getElementById('final-score');
+
+        // 게임 변수
+        let isPlaying = false;
+        let score = 0;
+        let combo = 0;
+        let gameSpeed = 5;
+        let animationId;
+        let frameCount = 0;
+
+        // 오디오 웹 API (비프음/효과음 재생용)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(freq, type = 'sine', duration = 0.1) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // 플레이어 캐릭터
+        const player = {
+            x: 80,
+            y: 250,
+            width: 35,
+            height: 35,
+            color: '#00fff5',
+            vy: 0,
+            gravity: 0.8,
+            jumpPower: -14,
+            isGrounded: true,
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.shadowBlur = 0; // 초기화
+            },
+            jump() {
+                if (this.isGrounded) {
+                    this.vy = this.jumpPower;
+                    this.isGrounded = false;
+                    playSound(440, 'square', 0.15); // 점프 사운드
+                }
+            },
+            update() {
+                this.vy += this.gravity;
+                this.y += this.vy;
+
+                // 바닥 충돌
+                const groundY = canvas.height - 50 - this.height;
+                if (this.y >= groundY) {
+                    this.y = groundY;
+                    this.vy = 0;
+                    this.isGrounded = true;
+                }
+            }
+        };
+
+        // 장애물(비트 노트) 관리
+        let obstacles = [];
+
+        class Obstacle {
+            constructor() {
+                this.width = 25;
+                this.height = 40;
+                this.x = canvas.width;
+                this.y = canvas.height - 50 - this.height;
+                this.color = '#ff2e63';
+                this.passed = false;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.shadowBlur = 0;
+            }
+
+            update() {
+                this.x -= gameSpeed;
+            }
+        }
+
+        // 바닥 및 배경 레이어 그리기
+        function drawEnvironment() {
+            // 바닥선
+            ctx.strokeStyle = '#00fff5';
+            ctx.lineWidth = 3;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#00fff5';
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - 50);
+            ctx.lineTo(canvas.width, canvas.height - 50);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // 배경 비트 그리드 효과 (움직이는 리듬감 연출)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            ctx.lineWidth = 1;
+            const gridOffset = (frameCount * gameSpeed) % 40;
+            for (let x = -gridOffset; x < canvas.width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height - 50);
+                ctx.stroke();
+            }
+        }
+
+        // 장애물 생성 (리듬 비트 패턴 간격)
+        function handleObstacles() {
+            // 주기적으로 장애물 생성 (속도에 맞춘 비트 간격)
+            if (frameCount % Math.max(40, Math.floor(100 - gameSpeed * 3)) === 0) {
+                if (Math.random() > 0.3) { // 랜덤하게 비트 배치
+                    obstacles.push(new Obstacle());
+                }
+            }
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obs = obstacles[i];
+                obs.update();
+                obs.draw();
+
+                // 충돌 검사
+                if (
+                    player.x < obs.x + obs.width &&
+                    player.x + player.width > obs.x &&
+                    player.y < obs.y + obs.height &&
+                    player.y + player.height > obs.y
+                ) {
+                    gameOver();
+                }
+
+                // 장애물을 완전히 통과했을 때 점수/콤보 획득
+                if (!obs.passed && obs.x + obs.width < player.x) {
+                    obs.passed = true;
+                    score += 10 + combo * 2;
+                    combo++;
+                    scoreEl.textContent = score;
+                    comboEl.textContent = combo;
+                    playSound(880 + combo * 20, 'sine', 0.08); // 통과 비트음
+                }
+
+                // 화면 밖으로 나간 장애물 제거
+                if (obs.x + obs.width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            }
+        }
+
+        // 메인 게임 루프
+        function animate() {
+            if (!isPlaying) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            frameCount++;
+            // 일정 시간마다 게임 속도 조금씩 증가
+            if (frameCount % 300 === 0 && gameSpeed < 12) {
+                gameSpeed += 0.5;
+            }
+
+            drawEnvironment();
+
+            player.update();
+            player.draw();
+
+            handleObstacles();
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // 게임 시작
+        function startGame() {
+            isPlaying = true;
+            score = 0;
+            combo = 0;
+            gameSpeed = 6;
+            frameCount = 0;
+            obstacles = [];
+            
+            scoreEl.textContent = score;
+            comboEl.textContent = combo;
+
+            player.y = canvas.height - 50 - player.height;
+            player.vy = 0;
+
+            startScreen.classList.add('hidden');
+            gameoverScreen.classList.add('hidden');
+
+            cancelAnimationFrame(animationId);
+            animate();
+        }
+
+        // 게임 오버
+        function gameOver() {
+            isPlaying = false;
+            playSound(150, 'sawtooth', 0.3); // 실패음
+            finalScoreEl.textContent = `최종 점수: ${score} (${combo} Combo)`;
+            gameoverScreen.classList.remove('hidden');
+        }
+
+        // 조작 이벤트 (스페이스바 및 클릭/터치)
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (isPlaying) {
+                    player.jump();
+                }
+            }
+        });
+
+        canvas.addEventListener('pointerdown', () => {
+            if (isPlaying) {
+                player.jump();
+            }
+        });
+    </script>
+
+</body>
+</html>
