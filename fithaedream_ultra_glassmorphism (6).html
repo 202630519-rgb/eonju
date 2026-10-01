@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>핏해드림 (FitHaeDream) - Perfect 10 Edition</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        glass: {
+                            light: 'rgba(255, 255, 255, 0.45)',
+                            lightBorder: 'rgba(255, 255, 255, 0.6)',
+                            dark: 'rgba(18, 24, 38, 0.65)',
+                            darkBorder: 'rgba(255, 255, 255, 0.12)',
+                        },
+                        brand: {
+                            purple: '#8b5cf6',
+                            pink: '#ec4899',
+                            cyan: '#06b6d4',
+                            amber: '#f59e0b'
+                        }
+                    },
+                    backdropBlur: {
+                        xs: '2px',
+                        md: '12px',
+                        xl: '20px'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Noto Sans KR -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap">
+    
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #311042 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e0e7ff 50%, #fae8ff 100%);
+            background-attachment: fixed;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.5);
+            border-radius: 999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.8);
+        }
+
+        .glass-panel {
+            background: rgba(18, 24, 38, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .light-mode .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        .light-mode .glass-btn {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .light-mode .glass-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-active {
+            position: relative;
+            color: #ec4899 !important;
+        }
+        .tab-active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 20%;
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+            border-radius: 99px;
+        }
+
+        /* Micro Thumb Grid Specifics (65-75px width focus) */
+        .micro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+        }
+    </style>
+</head>
+<body class="text-slate-100 transition-colors duration-300 pb-24 md:pb-8">
+
+<div id="app" class="max-w-5xl mx-auto px-3 sm:px-6 pt-4 pb-12">
+    
+    <!-- Header -->
+    <header class="glass-panel rounded-2xl p-4 mb-6 flex justify-between items-center sticky top-2 z-40">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-pink-500 to-amber-400 flex items-center justify-center text-white shadow-lg text-xl font-black">
+                핏
+            </div>
+            <div>
+                <h1 class="font-extrabold text-lg sm:text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300">
+                    FitHaeDream <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30">10-Option Edition</span>
+                </h1>
+                <p class="text-xs text-slate-400 light-mode:text-slate-600">퍼스널 컬러·체형·TPO·무드 각 10가지 맞춤 코디네이터</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button id="themeToggleBtn" onclick="toggleTheme()" class="glass-btn w-9 h-9 rounded-xl flex items-center justify-center text-amber-400 dark:text-amber-300">
+                <i class="fa-solid fa-moon text-lg" id="themeIcon"></i>
+            </button>
+            <button onclick="resetDataConfirmation()" class="glass-btn px-3 py-1.5 text-xs text-slate-300 hover:text-red-400 rounded-xl flex items-center gap-1.5">
+                <i class="fa-solid fa-rotate-right"></i> 초기화
+            </button>
+        </div>
+    </header>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex glass-panel rounded-2xl p-1.5 mb-6 justify-around text-sm font-medium">
+        <button onclick="switchTab('profileTab')" id="nav-profileTab" class="tab-btn flex-1 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-sliders text-purple-400"></i> 맞춤 프로필 (10종)
+        </button>
+        <button onclick="switchTab('closetTab')" id="nav-closetTab" class="tab-btn flex-1 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-shirt text-pink-400"></i> 옷장 & 업로드
+        </button>
+        <button onclick="switchTab('recommendTab')" id="nav-recommendTab" class="tab-btn flex-1 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> TOP 3 AI 추천
+        </button>
+        <button onclick="switchTab('calendarTab')" id="nav-calendarTab" class="tab-btn flex-1 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-calendar-days text-cyan-400"></i> OOTD 캘린더
+        </button>
+    </nav>
+
+    <main>
+        <section id="profileTab" class="tab-content block space-y-6">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-purple-500/20 text-purple-400 rounded-2xl">
+                        <i class="fa-solid fa-sliders text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold">맞춤 프로필 & TPO 설정 (각 10가지)</h2>
+                        <p class="text-xs text-slate-400">퍼스널 컬러, 체형, TPO 상황, 스타일 무드가 각 10가지 세분화 옵션으로 제공됩니다.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Personal Attributes (10 Colors / 10 Body Types) -->
+                    <div class="space-y-4 bg-slate-900/40 p-5 rounded-2xl border border-slate-700/40">
+                        <h3 class="font-bold text-sm text-purple-300 flex items-center gap-2">
+                            <i class="fa-solid fa-palette"></i> 퍼스널 컬러 & 체형 (각 10종)
+                        </h3>
+
+                        <!-- Exactly 10 Personal Color Options -->
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">퍼스널 컬러 (10종류)</label>
+                            <select id="userPersonalColor" onchange="saveProfileSettings()" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500">
+                                <option value="spring_light">1. 봄 워밍 라이트 (Spring Light)</option>
+                                <option value="spring_bright">2. 봄 브라이트 (Spring Bright)</option>
+                                <option value="summer_light" selected>3. 여름 쿨 라이트 (Summer Light)</option>
+                                <option value="summer_mute">4. 여름 클리어 뮤트 (Summer Mute)</option>
+                                <option value="summer_cool">5. 여름 트루 쿨 (Summer Cool)</option>
+                                <option value="autumn_mute">6. 가을 소프트 뮤트 (Autumn Mute)</option>
+                                <option value="autumn_deep">7. 가을 딥 웜 (Autumn Deep)</option>
+                                <option value="autumn_warm">8. 가을 트루 웜 (Autumn Warm)</option>
+                                <option value="winter_cool">9. 겨울 트루 쿨 (Winter Cool)</option>
+                                <option value="winter_deep">10. 겨울 딥 클리어 (Winter Deep)</option>
+                            </select>
+                        </div>
+
+                        <!-- Exactly 10 Body Type Options -->
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">체형 타입 (10종류)</label>
+                            <select id="userBodyType" onchange="saveProfileSettings()" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500">
+                                <option value="standard" selected>1. 스탠다드 밸런스형</option>
+                                <option value="inverted_triangle">2. 상체 발달 (역삼각형)</option>
+                                <option value="a_line">3. 하체 발달 (A 라인)</option>
+                                <option value="i_line">4. 슬림 스트레이트 (I 라인)</option>
+                                <option value="hourglass">5. 모래시계 밸런스형</option>
+                                <option value="o_line">6. 볼륨 라인 (O 라인)</option>
+                                <option value="long_waist">7. 허리가 긴 체형</option>
+                                <option value="long_leg">8. 다리가 긴 체형</option>
+                                <option value="broad_shoulder">9. 어깨가 넓은 프레임형</option>
+                                <option value="petite">10. 아담 / 작은 체형</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">선호 핏 / 실루엣</label>
+                            <select id="userFitPref" onchange="saveProfileSettings()" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500">
+                                <option value="over">오버핏 (Oversized)</option>
+                                <option value="standard" selected>스탠다드 / 레귤러핏 (Standard)</option>
+                                <option value="slim">슬림 / 크롭핏 (Slim Fit)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- TPO & Mood Attributes (10 TPO / 10 Moods) -->
+                    <div class="space-y-4 bg-slate-900/40 p-5 rounded-2xl border border-slate-700/40">
+                        <h3 class="font-bold text-sm text-pink-300 flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-sun-rain"></i> TPO 상황 & 스타일 무드 (각 10종)
+                        </h3>
+
+                        <!-- Exactly 10 TPO Options -->
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">TPO 상황 (10종류)</label>
+                            <select id="tpoOccasion" onchange="saveProfileSettings()" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
+                                <option value="office" selected>1. 🏢 오피스 / 비즈니스</option>
+                                <option value="wedding">2. 💒 결혼식 하객</option>
+                                <option value="date">3. 💖 데이트 / 소개팅</option>
+                                <option value="daily_cafe">4. ☕ 데일리 / 카페</option>
+                                <option value="vacation">5. ✈️ 여행 / 휴양지</option>
+                                <option value="sports">6. 🏃 운동 / 액티비티</option>
+                                <option value="study_interview">7. 🎓 학업 / 면접 / 스터디</option>
+                                <option value="party_club">8. 🎉 파티 / 클럽 / 공연</option>
+                                <option value="outdoor">9. 🏕️ 캠핑 / 아웃도어</option>
+                                <option value="homewear">10. 🏠 집콕 / 홈웨어</option>
+                            </select>
+                        </div>
+
+                        <!-- Exactly 10 Style Mood Options -->
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">스타일 무드 (10종류)</label>
+                            <select id="tpoMood" onchange="saveProfileSettings()" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
+                                <option value="minimal" selected>1. ✨ 미니멀 (Minimal)</option>
+                                <option value="old_money">2. 💎 올드머니 / 클래식 (Old Money)</option>
+                                <option value="casual">3. 🌿 캐주얼 / 리얼웨이 (Casual)</option>
+                                <option value="gorpcore">4. 🏔️ 고프코어 / 아웃도어 (Gorpcore)</option>
+                                <option value="street">5. 🧢 스트릿 / 힙합 (Street)</option>
+                                <option value="geek_chic">6. 👓 긱시크 / 스마트 (Geek Chic)</option>
+                                <option value="amekaji">7. 🍂 아메카지 / 빈티지 (Americaji)</option>
+                                <option value="romantic">8. 🩰 프렌치 시크 / 로맨틱 (Romantic)</option>
+                                <option value="sporty">9. 👟 블록코어 / 스포티 (Sporty)</option>
+                                <option value="modern_chic">10. 🕶️ 시크 / 모던 (Modern Chic)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">현재 날씨 & 기온</label>
+                            <select id="tpoWeather" onchange="saveProfileSettings()" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
+                                <option value="hot">무더운 여름 (28°C 이상)</option>
+                                <option value="warm">선선함 / 봄·가을 (18°C ~ 27°C)</option>
+                                <option value="chilly" selected>쌀쌀함 / 환절기 (10°C ~ 17°C)</option>
+                                <option value="cold">추움 / 한겨울 (9°C 이하)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <button onclick="switchTab('closetTab')" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 font-bold text-xs sm:text-sm shadow-lg shadow-purple-500/30 hover:scale-105 transition-all flex items-center gap-2">
+                        설정 완료 후 옷장으로 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="closetTab" class="tab-content hidden space-y-6">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-pink-500/20 text-pink-400 rounded-2xl">
+                        <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold">1단계: 옷 카테고리 지정 후 이미지 등록</h2>
+                        <p class="text-xs text-slate-400">※ 정확한 분류를 위해 <span class="text-pink-400 font-bold">카테고리를 먼저 선택</span>하셔야 업로드 창이 활성화됩니다.</p>
+                    </div>
+                </div>
+
+                <!-- Step 1: Category Picker (Mandatory First) -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-2">① 필수 카테고리 선택</label>
+                    <div class="grid grid-cols-5 gap-2" id="categoryPickerGrid">
+                        <button type="button" onclick="selectCategory('top')" id="catBtn-top" class="cat-select-btn p-3 rounded-2xl border border-slate-700/60 bg-slate-900/50 hover:bg-slate-800 text-center transition flex flex-col items-center gap-1">
+                            <i class="fa-solid fa-shirt text-lg text-purple-400"></i>
+                            <span class="text-[11px] font-semibold">상의</span>
+                        </button>
+                        <button type="button" onclick="selectCategory('bottom')" id="catBtn-bottom" class="cat-select-btn p-3 rounded-2xl border border-slate-700/60 bg-slate-900/50 hover:bg-slate-800 text-center transition flex flex-col items-center gap-1">
+                            <i class="fa-solid fa-vector-square text-lg text-blue-400"></i>
+                            <span class="text-[11px] font-semibold">하의</span>
+                        </button>
+                        <button type="button" onclick="selectCategory('outer')" id="catBtn-outer" class="cat-select-btn p-3 rounded-2xl border border-slate-700/60 bg-slate-900/50 hover:bg-slate-800 text-center transition flex flex-col items-center gap-1">
+                            <i class="fa-solid fa-user-ninja text-lg text-pink-400"></i>
+                            <span class="text-[11px] font-semibold">아우터</span>
+                        </button>
+                        <button type="button" onclick="selectCategory('shoes')" id="catBtn-shoes" class="cat-select-btn p-3 rounded-2xl border border-slate-700/60 bg-slate-900/50 hover:bg-slate-800 text-center transition flex flex-col items-center gap-1">
+                            <i class="fa-solid fa-shoe-prints text-lg text-amber-400"></i>
+                            <span class="text-[11px] font-semibold">신발</span>
+                        </button>
+                        <button type="button" onclick="selectCategory('acc')" id="catBtn-acc" class="cat-select-btn p-3 rounded-2xl border border-slate-700/60 bg-slate-900/50 hover:bg-slate-800 text-center transition flex flex-col items-center gap-1">
+                            <i class="fa-solid fa-glasses text-lg text-emerald-400"></i>
+                            <span class="text-[11px] font-semibold">악세</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Canvas Advanced Controls & Dropzone -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <div class="md:col-span-1 space-y-3 bg-slate-900/40 p-4 rounded-2xl border border-slate-700/40">
+                        <span class="text-xs font-bold text-purple-300 block">② Canvas 이미지 보정 옵션</span>
+                        
+                        <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                            <input type="checkbox" id="optEnhance" checked class="rounded border-slate-700 text-purple-600 focus:ring-purple-500">
+                            선명도 & 윤곽선 강조
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+                            <input type="checkbox" id="optNuki" checked class="rounded border-slate-700 text-purple-600 focus:ring-purple-500">
+                            배경 자동 투명화 (누끼)
+                        </label>
+                        <div>
+                            <div class="flex justify-between text-[10px] text-slate-400 mb-1">
+                                <span>누끼 제거 민감도</span>
+                                <span id="thresholdVal">35</span>
+                            </div>
+                            <input type="range" id="nukiThreshold" min="10" max="80" value="35" oninput="document.getElementById('thresholdVal').innerText=this.value" class="w-full accent-purple-500 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] text-slate-400 mb-1">아이템 명칭 (선택)</label>
+                            <input type="text" id="clothTitleInput" placeholder="예: 오버핏 블레이저" class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-purple-500">
+                        </div>
+                    </div>
+
+                    <!-- Dropzone Area -->
+                    <div class="md:col-span-2 relative">
+                        <div id="dropzone" class="border-2 border-dashed border-slate-700 rounded-2xl p-6 text-center bg-slate-900/30 transition flex flex-col items-center justify-center min-h-[160px] opacity-50 cursor-not-allowed">
+                            <input type="file" id="clothingFileInput" accept="image/*" disabled onchange="handleFileSelect(event)" class="absolute inset-0 w-full h-full opacity-0 cursor-not-allowed">
+                            <div id="dropzoneText" class="space-y-2">
+                                <i class="fa-solid fa-lock text-3xl text-slate-500"></i>
+                                <p class="text-xs font-semibold text-slate-400">상단에서 <span class="text-pink-400 font-bold">카테고리를 먼저 선택</span>해 주세요.</p>
+                                <p class="text-[10px] text-slate-500">선택 완료 시 이미지 등록 영역이 활성화됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Micro Grid Wardrobe (65px - 75px) -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h3 class="text-lg font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-boxes-packing text-pink-400"></i> 마이크로 그리드 옷장
+                            <span id="closetCountBadge" class="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-mono">0개</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">초소형 카드 타일로 수많은 옷을 한눈에 관리합니다.</p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1 bg-slate-900/50 p-1 rounded-xl border border-slate-800 text-xs">
+                        <button onclick="filterCloset('all')" id="filter-all" class="closet-filter-btn px-2.5 py-1 rounded-lg bg-purple-600 text-white font-semibold">전체</button>
+                        <button onclick="filterCloset('top')" id="filter-top" class="closet-filter-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white">상의</button>
+                        <button onclick="filterCloset('bottom')" id="filter-bottom" class="closet-filter-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white">하의</button>
+                        <button onclick="filterCloset('outer')" id="filter-outer" class="closet-filter-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white">아우터</button>
+                        <button onclick="filterCloset('shoes')" id="filter-shoes" class="closet-filter-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white">신발</button>
+                        <button onclick="filterCloset('acc')" id="filter-acc" class="closet-filter-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white">악세</button>
+                    </div>
+                </div>
+
+                <div id="microClosetGrid" class="micro-grid pt-2">
+                    <!-- Dynamic rendering -->
+                </div>
+            </div>
+        </section>
+
+        <section id="recommendTab" class="tab-content hidden space-y-6">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30 mb-2">
+                            <i class="fa-solid fa-crown"></i> 10개 세분화 조건 기반 AI 계산
+                        </div>
+                        <h2 class="text-2xl font-extrabold tracking-tight">맞춤 착장 추천 TOP 3</h2>
+                        <p class="text-xs text-slate-400 mt-1">선택된 10가지 퍼스널컬러/체형/TPO/무드를 연산한 최적의 코디 조합입니다.</p>
+                    </div>
+
+                    <button onclick="generateTop3Outfits()" class="w-full md:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-pink-500 to-purple-600 font-extrabold text-xs sm:text-sm text-white shadow-lg shadow-pink-500/25 hover:scale-105 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate text-base"></i> 코디 새로 조합하기
+                    </button>
+                </div>
+
+                <div id="top3OutfitContainer" class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
+                    <!-- Dynamic Top 3 render -->
+                </div>
+            </div>
+        </section>
+
+        <section id="calendarTab" class="tab-content hidden space-y-6">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-cyan-400"></i> OOTD 스타일 캘린더
+                        </h2>
+                        <p class="text-xs text-slate-400">오늘의 추천 코디를 캘린더에 기록하고 인스타 카드로 공유해보세요.</p>
+                    </div>
+
+                    <div class="flex items-center gap-3 bg-slate-900/60 px-3 py-1.5 rounded-2xl border border-slate-700/50">
+                        <button onclick="changeMonth(-1)" class="text-slate-400 hover:text-white p-1">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <span id="calendarMonthLabel" class="font-bold text-sm min-w-[90px] text-center">2026년 9월</span>
+                        <button onclick="changeMonth(1)" class="text-slate-400 hover:text-white p-1">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/40 rounded-2xl p-4 border border-slate-800">
+                    <div class="grid grid-cols-7 text-center text-xs font-bold text-slate-400 mb-2 pb-2 border-b border-slate-800">
+                        <span class="text-red-400">일</span>
+                        <span>월</span>
+                        <span>화</span>
+                        <span>수</span>
+                        <span>목</span>
+                        <span>금</span>
+                        <span class="text-cyan-400">토</span>
+                    </div>
+
+                    <div id="calendarDaysGrid" class="grid grid-cols-7 gap-1 sm:gap-2">
+                        <!-- Rendered via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Mobile Navigation Bar -->
+    <div class="md:hidden fixed bottom-3 left-3 right-3 glass-panel rounded-2xl p-2 z-50 flex justify-around items-center border border-white/20 shadow-2xl">
+        <button onclick="switchTab('profileTab')" id="mobile-profileTab" class="mobile-tab-btn flex flex-col items-center p-2 text-slate-400 text-[10px]">
+            <i class="fa-solid fa-sliders text-base mb-0.5"></i>
+            <span>프로필</span>
+        </button>
+        <button onclick="switchTab('closetTab')" id="mobile-closetTab" class="mobile-tab-btn flex flex-col items-center p-2 text-slate-400 text-[10px]">
+            <i class="fa-solid fa-shirt text-base mb-0.5"></i>
+            <span>옷장</span>
+        </button>
+        <button onclick="switchTab('recommendTab')" id="mobile-recommendTab" class="mobile-tab-btn flex flex-col items-center p-2 text-slate-400 text-[10px]">
+            <i class="fa-solid fa-wand-magic-sparkles text-base mb-0.5"></i>
+            <span>TOP3</span>
+        </button>
+        <button onclick="switchTab('calendarTab')" id="mobile-calendarTab" class="mobile-tab-btn flex flex-col items-center p-2 text-slate-400 text-[10px]">
+            <i class="fa-solid fa-calendar-days text-base mb-0.5"></i>
+            <span>달력</span>
+        </button>
+    </div>
+</div>
+
+<!-- Modal for 9:16 Insta OOTD Card Export -->
+<div id="ootdModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel max-w-sm w-full rounded-3xl p-6 space-y-4 relative border border-purple-500/30">
+        <button onclick="closeOotdModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-full bg-slate-800/60 flex items-center justify-center">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <h3 class="font-bold text-lg text-purple-300 flex items-center gap-2">
+            <i class="fa-brands fa-instagram text-xl text-pink-400"></i> OOTD 9:16 인스타 스토리 카드
+        </h3>
+
+        <div class="flex justify-center">
+            <canvas id="ootdCanvas" width="360" height="640" class="rounded-2xl shadow-2xl border border-white/20 max-h-[460px] w-auto"></canvas>
+        </div>
+
+        <div class="flex gap-2">
+            <button onclick="downloadOotdCard()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 font-bold text-xs text-white shadow-lg flex items-center justify-center gap-2">
+                <i class="fa-solid fa-download"></i> 카드 이미지 다운로드
+            </button>
+            <button onclick="closeOotdModal()" class="px-4 py-3 rounded-xl bg-slate-800 text-xs font-semibold hover:bg-slate-700">
+                닫기
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY_CLOSET = 'fithaedream_closet_v10';
+    const STORAGE_KEY_PROFILE = 'fithaedream_profile_v10';
+    const STORAGE_KEY_CALENDAR = 'fithaedream_calendar_v10';
+
+    let state = {
+        selectedCategory: null,
+        closet: [],
+        currentFilter: 'all',
+        profile: {
+            personalColor: 'summer_light',
+            bodyType: 'standard',
+            fitPref: 'standard',
+            occasion: 'office',
+            weather: 'chilly',
+            mood: 'minimal'
+        },
+        calendarData: {},
+        calendarCurrentDate: new Date()
+    };
+
+    function generateSampleCanvas(category, colorHex, label) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 200;
+        canvas.height = 200;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(0, 0, 200, 200);
+
+        ctx.fillStyle = colorHex;
+        ctx.beginPath();
+        if (category === 'top') {
+            ctx.roundRect(40, 50, 120, 110, 12);
+        } else if (category === 'bottom') {
+            ctx.roundRect(55, 40, 90, 130, 8);
+        } else if (category === 'outer') {
+            ctx.roundRect(30, 30, 140, 140, 16);
+        } else if (category === 'shoes') {
+            ctx.roundRect(35, 80, 130, 60, 14);
+        } else {
+            ctx.arc(100, 100, 50, 0, Math.PI * 2);
+        }
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 15px "Noto Sans KR", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(label, 100, 185);
+
+        return canvas.toDataURL('image/png');
+    }
+
+    const SAMPLE_CLOTHES = [
+        { id: 's-1', category: 'top', categoryName: '상의', title: '실크 라운드 니트', imageUrl: generateSampleCanvas('top', '#f8fafc', '실크 니트') },
+        { id: 's-2', category: 'top', categoryName: '상의', title: '딥 네이비 셔츠', imageUrl: generateSampleCanvas('top', '#1e293b', '네이비 셔츠') },
+        { id: 's-3', category: 'bottom', categoryName: '하의', title: '와이드 데님 팬츠', imageUrl: generateSampleCanvas('bottom', '#2563eb', '데님 팬츠') },
+        { id: 's-4', category: 'bottom', categoryName: '하의', title: '차콜 슬랙스', imageUrl: generateSampleCanvas('bottom', '#334155', '차콜 슬랙스') },
+        { id: 's-5', category: 'outer', categoryName: '아우터', title: '블랙 오버 트렌치', imageUrl: generateSampleCanvas('outer', '#0f172a', '트렌치 코트') },
+        { id: 's-6', category: 'outer', categoryName: '아우터', title: '카멜 울 블레이저', imageUrl: generateSampleCanvas('outer', '#d97706', '울 블레이저') },
+        { id: 's-7', category: 'shoes', categoryName: '신발', title: '화이트 스니커즈', imageUrl: generateSampleCanvas('shoes', '#e2e8f0', '스니커즈') },
+        { id: 's-8', category: 'shoes', categoryName: '신발', title: '클래식 로퍼', imageUrl: generateSampleCanvas('shoes', '#1e1b4b', '클래식 로퍼') }
+    ];
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadLocalStorage();
+        renderMicroCloset();
+        generateTop3Outfits();
+        renderCalendar();
+        switchTab('profileTab');
+    });
+
+    function loadLocalStorage() {
+        const savedCloset = localStorage.getItem(STORAGE_KEY_CLOSET);
+        state.closet = savedCloset ? JSON.parse(savedCloset) : SAMPLE_CLOTHES;
+
+        const savedProfile = localStorage.getItem(STORAGE_KEY_PROFILE);
+        if (savedProfile) {
+            try {
+                state.profile = JSON.parse(savedProfile);
+                if (document.getElementById('userPersonalColor')) document.getElementById('userPersonalColor').value = state.profile.personalColor;
+                if (document.getElementById('userBodyType')) document.getElementById('userBodyType').value = state.profile.bodyType;
+                if (document.getElementById('userFitPref')) document.getElementById('userFitPref').value = state.profile.fitPref;
+                if (document.getElementById('tpoOccasion')) document.getElementById('tpoOccasion').value = state.profile.occasion;
+                if (document.getElementById('tpoWeather')) document.getElementById('tpoWeather').value = state.profile.weather;
+                if (document.getElementById('tpoMood')) document.getElementById('tpoMood').value = state.profile.mood;
+            } catch (e) {}
+        }
+
+        const savedCalendar = localStorage.getItem(STORAGE_KEY_CALENDAR);
+        if (savedCalendar) {
+            try { state.calendarData = JSON.parse(savedCalendar); } catch (e) {}
+        }
+    }
+
+    function saveCloset() {
+        localStorage.setItem(STORAGE_KEY_CLOSET, JSON.stringify(state.closet));
+        renderMicroCloset();
+    }
+
+    function saveProfileSettings() {
+        state.profile = {
+            personalColor: document.getElementById('userPersonalColor').value,
+            bodyType: document.getElementById('userBodyType').value,
+            fitPref: document.getElementById('userFitPref').value,
+            occasion: document.getElementById('tpoOccasion').value,
+            weather: document.getElementById('tpoWeather').value,
+            mood: document.getElementById('tpoMood').value,
+        };
+        localStorage.setItem(STORAGE_KEY_PROFILE, JSON.stringify(state.profile));
+        generateTop3Outfits();
+    }
+
+    function resetDataConfirmation() {
+        if (confirm('모든 옷장 데이터 및 맞춤 프로필 설정을 초기화하시겠습니까?')) {
+            localStorage.clear();
+            state.closet = SAMPLE_CLOTHES;
+            state.calendarData = {};
+            saveCloset();
+            location.reload();
+        }
+    }
+
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('themeIcon');
+        if (body.classList.contains('light-mode')) {
+            body.classList.remove('light-mode');
+            body.classList.add('dark');
+            icon.className = 'fa-solid fa-moon text-lg';
+        } else {
+            body.classList.add('light-mode');
+            body.classList.remove('dark');
+            icon.className = 'fa-solid fa-sun text-lg text-amber-500';
+        }
+    }
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById(tabId).classList.remove('hidden');
+
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active', 'bg-slate-800/80'));
+        const activeDesktopNav = document.getElementById('nav-' + tabId);
+        if (activeDesktopNav) activeDesktopNav.classList.add('tab-active', 'bg-slate-800/80');
+
+        document.querySelectorAll('.mobile-tab-btn').forEach(btn => btn.classList.remove('text-pink-400'));
+        const activeMobileNav = document.getElementById('mobile-' + tabId);
+        if (activeMobileNav) activeMobileNav.classList.add('text-pink-400');
+
+        if (tabId === 'recommendTab') generateTop3Outfits();
+    }
+
+    const CATEGORY_NAMES = { top: '상의', bottom: '하의', outer: '아우터', shoes: '신발', acc: '악세서리' };
+
+    function selectCategory(catId) {
+        state.selectedCategory = catId;
+        document.querySelectorAll('.cat-select-btn').forEach(btn => {
+            btn.classList.remove('border-pink-500', 'bg-pink-500/20', 'ring-2', 'ring-pink-500/40');
+        });
+
+        const activeBtn = document.getElementById(`catBtn-${catId}`);
+        if (activeBtn) activeBtn.classList.add('border-pink-500', 'bg-pink-500/20', 'ring-2', 'ring-pink-500/40');
+
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('clothingFileInput');
+        const dropText = document.getElementById('dropzoneText');
+
+        dropzone.classList.remove('opacity-50', 'cursor-not-allowed');
+        dropzone.classList.add('cursor-pointer', 'hover:bg-slate-800/50');
+        fileInput.removeAttribute('disabled');
+
+        dropText.innerHTML = `
+            <i class="fa-solid fa-cloud-arrow-up text-3xl text-pink-400 animate-bounce"></i>
+            <p class="text-xs font-bold text-slate-200">[<span class="text-pink-400">${CATEGORY_NAMES[catId]}</span>] 업로드 준비 완료!</p>
+            <p class="text-[10px] text-slate-400">여기를 클릭하거나 이미지를 드래그해주세요.</p>
+        `;
+    }
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file || !state.selectedCategory) return;
+
+        const reader = new FileReader();
+        reader.onload = e => processAndSaveImage(e.target.result);
+        reader.readAsDataURL(file);
+    }
+
+    function processAndSaveImage(dataUrl) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 300;
+            canvas.height = 300;
+
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, 300, 300);
+
+            const scale = Math.min(260 / img.width, 260 / img.height);
+            const x = (300 - img.width * scale) / 2;
+            const y = (300 - img.height * scale) / 2;
+            ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+            const optEnhance = document.getElementById('optEnhance').checked;
+            const optNuki = document.getElementById('optNuki').checked;
+            const threshold = parseInt(document.getElementById('nukiThreshold').value, 10);
+
+            let imgData = ctx.getImageData(0, 0, 300, 300);
+            let d = imgData.data;
+
+            if (optNuki || optEnhance) {
+                const bgR = d[0], bgG = d[1], bgB = d[2];
+
+                for (let i = 0; i < d.length; i += 4) {
+                    const r = d[i], g = d[i+1], b = d[i+2];
+
+                    if (optNuki) {
+                        const dist = Math.sqrt((r-bgR)**2 + (g-bgG)**2 + (b-bgB)**2);
+                        if (dist < threshold) {
+                            d[i+3] = 0;
+                            continue;
+                        }
+                    }
+
+                    if (optEnhance && d[i+3] !== 0) {
+                        d[i] = Math.min(255, Math.max(0, (r - 128) * 1.15 + 128));
+                        d[i+1] = Math.min(255, Math.max(0, (g - 128) * 1.15 + 128));
+                        d[i+2] = Math.min(255, Math.max(0, (b - 128) * 1.15 + 128));
+                    }
+                }
+                ctx.putImageData(imgData, 0, 0);
+            }
+
+            const customTitle = document.getElementById('clothTitleInput').value.trim() || 
+                `${CATEGORY_NAMES[state.selectedCategory]} #${state.closet.length + 1}`;
+
+            const newItem = {
+                id: 'cloth-' + Date.now(),
+                category: state.selectedCategory,
+                categoryName: CATEGORY_NAMES[state.selectedCategory],
+                title: customTitle,
+                imageUrl: canvas.toDataURL('image/png')
+            };
+
+            state.closet.unshift(newItem);
+            saveCloset();
+
+            document.getElementById('clothingFileInput').value = '';
+            document.getElementById('clothTitleInput').value = '';
+            alert(`[${newItem.categoryName}] '${newItem.title}' 아이템 등록 완료!`);
+        };
+        img.src = dataUrl;
+    }
+
+    function filterCloset(cat) {
+        state.currentFilter = cat;
+        document.querySelectorAll('.closet-filter-btn').forEach(btn => {
+            btn.className = 'closet-filter-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white';
+        });
+        const activeBtn = document.getElementById(`filter-${cat}`);
+        if (activeBtn) activeBtn.className = 'closet-filter-btn px-2.5 py-1 rounded-lg bg-purple-600 text-white font-semibold';
+
+        renderMicroCloset();
+    }
+
+    function renderMicroCloset() {
+        const grid = document.getElementById('microClosetGrid');
+        const countBadge = document.getElementById('closetCountBadge');
+
+        const filtered = state.currentFilter === 'all' 
+            ? state.closet 
+            : state.closet.filter(item => item.category === state.currentFilter);
+
+        countBadge.innerText = `${filtered.length}개`;
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `<div class="col-span-full text-center py-8 text-xs text-slate-500">등록된 옷이 없습니다.</div>`;
+            return;
+        }
+
+        grid.innerHTML = filtered.map(item => `
+            <div class="relative group aspect-square rounded-xl overflow-hidden border border-slate-700/60 bg-slate-900/60 hover:border-pink-500 transition-all shadow-md">
+                <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-full object-cover">
+                <span class="absolute top-0.5 left-0.5 text-[7px] font-bold px-1 py-0.2 rounded bg-black/70 text-pink-300">
+                    ${item.categoryName}
+                </span>
+                <button onclick="deleteClothItem('${item.id}')" class="absolute top-0.5 right-0.5 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600/80 hover:bg-red-600 text-white w-3.5 h-3.5 rounded-full text-[8px] flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="absolute inset-x-0 bottom-0 bg-black/80 p-0.5 text-[7px] text-center truncate opacity-0 group-hover:opacity-100 transition-opacity text-slate-200">
+                    ${item.title}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function deleteClothItem(id) {
+        if (confirm('이 옷을 삭제할까요?')) {
+            state.closet = state.closet.filter(i => i.id !== id);
+            saveCloset();
+        }
+    }
+
+    function generateTop3Outfits() {
+        const container = document.getElementById('top3OutfitContainer');
+        const tops = state.closet.filter(i => i.category === 'top');
+        const bottoms = state.closet.filter(i => i.category === 'bottom');
+        const outers = state.closet.filter(i => i.category === 'outer');
+        const shoes = state.closet.filter(i => i.category === 'shoes');
+
+        if (tops.length === 0 || bottoms.length === 0) {
+            container.innerHTML = `
+                <div class="col-span-full glass-panel p-8 rounded-2xl text-center space-y-3">
+                    <i class="fa-solid fa-shirt text-4xl text-slate-600"></i>
+                    <p class="text-xs font-bold text-slate-300">최소 1개 이상의 [상의]와 [하의]를 등록해야 AI 착장 조합이 생성됩니다.</p>
+                </div>
+            `;
+            return;
+        }
+
+        const combinations = [];
+        tops.forEach(top => {
+            bottoms.forEach(bottom => {
+                const shoe = shoes.length > 0 ? shoes[Math.floor(Math.random() * shoes.length)] : null;
+                const outer = outers.length > 0 && (state.profile.weather === 'chilly' || state.profile.weather === 'cold') 
+                    ? outers[Math.floor(Math.random() * outers.length)] 
+                    : null;
+
+                let score = 85 + Math.floor(Math.random() * 11);
+                const moodSelect = document.getElementById('tpoMood');
+                const moodText = moodSelect ? moodSelect.options[moodSelect.selectedIndex].text.split('.')[1].split('(')[0] : '추천';
+
+                combinations.push({
+                    top, bottom, outer, shoe,
+                    score: Math.min(99, score),
+                    tag: `${moodText.trim()} 조합`
+                });
+            });
+        });
+
+        combinations.sort((a, b) => b.score - a.score);
+        const top3 = combinations.slice(0, 3);
+
+        const rankBadges = [
+            { text: '🏆 BEST 1ST MATCH', color: 'from-amber-400 to-amber-600' },
+            { text: '🥈 HIGH MATCH 2ND', color: 'from-slate-300 to-slate-500' },
+            { text: '🥉 GOOD MATCH 3RD', color: 'from-amber-700 to-amber-900' }
+        ];
+
+        container.innerHTML = top3.map((outfit, index) => `
+            <div class="glass-panel rounded-3xl p-5 space-y-4 relative border border-white/10 flex flex-col justify-between hover:border-pink-500/50 transition">
+                <div class="flex justify-between items-center">
+                    <span class="px-2.5 py-1 rounded-xl bg-gradient-to-r ${rankBadges[index].color} text-white font-black text-[10px] shadow-md">
+                        ${rankBadges[index].text}
+                    </span>
+                    <div class="text-right">
+                        <span class="text-lg font-black text-amber-400">${outfit.score}</span>
+                        <span class="text-[10px] text-slate-400">/100</span>
+                    </div>
+                </div>
+
+                <h4 class="font-extrabold text-xs text-slate-100 truncate">${outfit.tag}</h4>
+
+                <div class="grid grid-cols-2 gap-2 bg-slate-900/50 p-3 rounded-2xl border border-slate-800">
+                    <div class="space-y-1 text-center">
+                        <span class="text-[9px] text-purple-300 font-bold">상의</span>
+                        <div class="w-full aspect-square rounded-lg overflow-hidden bg-slate-800">
+                            <img src="${outfit.top.imageUrl}" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="space-y-1 text-center">
+                        <span class="text-[9px] text-blue-300 font-bold">하의</span>
+                        <div class="w-full aspect-square rounded-lg overflow-hidden bg-slate-800">
+                            <img src="${outfit.bottom.imageUrl}" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    ${outfit.outer ? `
+                        <div class="space-y-1 text-center col-span-1">
+                            <span class="text-[9px] text-pink-300 font-bold">아우터</span>
+                            <div class="w-full aspect-square rounded-lg overflow-hidden bg-slate-800">
+                                <img src="${outfit.outer.imageUrl}" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${outfit.shoe ? `
+                        <div class="space-y-1 text-center ${outfit.outer ? 'col-span-1' : 'col-span-2'}">
+                            <span class="text-[9px] text-amber-300 font-bold">신발</span>
+                            <div class="w-full aspect-square rounded-lg overflow-hidden bg-slate-800">
+                                <img src="${outfit.shoe.imageUrl}" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <div class="flex gap-2 pt-1">
+                    <button onclick="openOotdCardModal(${index})" class="flex-1 py-2 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-[10px] font-bold text-purple-200 flex items-center justify-center gap-1 transition">
+                        <i class="fa-brands fa-instagram text-pink-400"></i> OOTD 카드
+                    </button>
+                    <button onclick="saveToTodayCalendar(${index})" class="py-2 px-3 rounded-xl bg-cyan-600/30 hover:bg-cyan-600/50 border border-cyan-500/40 text-[10px] font-bold text-cyan-200 flex items-center justify-center gap-1 transition">
+                        <i class="fa-solid fa-calendar-plus"></i> 달력 저장
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        window.currentTop3 = top3;
+    }
+
+    function openOotdCardModal(index) {
+        const outfit = window.currentTop3[index];
+        if (!outfit) return;
+        document.getElementById('ootdModal').classList.remove('hidden');
+        renderOotdCanvas(outfit);
+    }
+
+    function closeOotdModal() {
+        document.getElementById('ootdModal').classList.add('hidden');
+    }
+
+    function renderOotdCanvas(outfit) {
+        const canvas = document.getElementById('ootdCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const grad = ctx.createLinearGradient(0, 0, 360, 640);
+        grad.addColorStop(0, '#0f172a');
+        grad.addColorStop(0.5, '#2e1065');
+        grad.addColorStop(1, '#0284c7');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 360, 640);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'black 20px "Inter", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('FIT HAE DREAM OOTD', 180, 50);
+
+        ctx.fillStyle = '#ec4899';
+        ctx.font = '600 11px "Noto Sans KR", sans-serif';
+        ctx.fillText(`SCORE ${outfit.score}% · ${outfit.tag}`, 180, 75);
+
+        const itemsToDraw = [outfit.top, outfit.bottom];
+        if (outfit.outer) itemsToDraw.push(outfit.outer);
+        if (outfit.shoe) itemsToDraw.push(outfit.shoe);
+
+        itemsToDraw.forEach((item, idx) => {
+            const img = new Image();
+            img.onload = () => {
+                const row = Math.floor(idx / 2);
+                const col = idx % 2;
+                const x = 30 + col * 155;
+                const y = 110 + row * 180;
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.beginPath();
+                ctx.roundRect(x, y, 145, 160, 16);
+                ctx.fill();
+
+                ctx.drawImage(img, x + 12, y + 12, 120, 120);
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = 'bold 10px "Noto Sans KR", sans-serif';
+                ctx.fillText(item.title, x + 72, y + 148);
+            };
+            img.src = item.imageUrl;
+        });
+    }
+
+    function downloadOotdCard() {
+        const canvas = document.getElementById('ootdCanvas');
+        const link = document.createElement('a');
+        link.download = `OOTD_FIT_${Date.now()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+
+    function renderCalendar() {
+        const grid = document.getElementById('calendarDaysGrid');
+        const label = document.getElementById('calendarMonthLabel');
+
+        const year = state.calendarCurrentDate.getFullYear();
+        const month = state.calendarCurrentDate.getMonth();
+        label.innerText = `${year}년 ${month + 1}월`;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        grid.innerHTML = '';
+        for (let i = 0; i < firstDay; i++) {
+            grid.innerHTML += `<div class="h-16 sm:h-20 bg-transparent"></div>`;
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const savedOutfit = state.calendarData[dateStr];
+
+            grid.innerHTML += `
+                <div class="h-16 sm:h-20 bg-slate-900/60 rounded-xl p-1 border border-slate-800 flex flex-col justify-between relative group hover:border-cyan-500/50 transition">
+                    <span class="text-[10px] font-bold ${new Date().getDate() === day && new Date().getMonth() === month ? 'text-pink-400 font-black' : 'text-slate-400'}">
+                        ${day}
+                    </span>
+
+                    ${savedOutfit ? `
+                        <div class="w-full h-10 rounded-lg overflow-hidden bg-slate-800 relative">
+                            <img src="${savedOutfit.top.imageUrl}" class="w-full h-full object-cover">
+                            <span class="absolute inset-0 bg-black/40 flex items-center justify-center text-[8px] font-extrabold text-cyan-300">OOTD</span>
+                        </div>
+                    ` : `
+                        <button onclick="manualSaveToDate('${dateStr}')" class="opacity-0 group-hover:opacity-100 text-[9px] text-slate-500 hover:text-cyan-300 text-center py-1">
+                            + 저장
+                        </button>
+                    `}
+                </div>
+            `;
+        }
+    }
+
+    function changeMonth(delta) {
+        state.calendarCurrentDate.setMonth(state.calendarCurrentDate.getMonth() + delta);
+        renderCalendar();
+    }
+
+    function saveToTodayCalendar(outfitIndex) {
+        const outfit = window.currentTop3[outfitIndex];
+        if (!outfit) return;
+
+        const today = new Date();
+        const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+        state.calendarData[dateStr] = outfit;
+        localStorage.setItem(STORAGE_KEY_CALENDAR, JSON.stringify(state.calendarData));
+        renderCalendar();
+        alert(`오늘(${dateStr})의 코디로 저장되었습니다!`);
+    }
+
+    function manualSaveToDate(dateStr) {
+        if (!window.currentTop3 || window.currentTop3.length === 0) {
+            alert('먼저 AI 추천 탭에서 코디를 새로 조합해 주세요.');
+            return;
+        }
+        state.calendarData[dateStr] = window.currentTop3[0];
+        localStorage.setItem(STORAGE_KEY_CALENDAR, JSON.stringify(state.calendarData));
+        renderCalendar();
+    }
+</script>
+</body>
+</html>
